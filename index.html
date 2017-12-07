@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>US Map Demo</title>
+	
+	<style>
+	  #alert {
+		float: right;
+	    font-family: Arial, Helvetica, sans-serif;
+	    font-size: 16px;
+	    background-color: #ddd;
+	    color: #333;
+	    padding: 5px;
+	    font-weight: bold;
+		width: 25%;
+	  }
+	</style>
+	
+	<script src="../lib/raphael.js"></script>
+	<!-- <script src="scale.raphael.js"></script> -->
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.js"></script>
+	<script src="color.jquery.js"></script>
+	<script src="../us-map.js"></script>
+	
+	<!-- To load data from elastic search / overview -->
+	<script>	
+	/* Data collected from the elastic search server */
+	var documentList = {ME: {"DOC#11":'<a href="http://www.url.com/doc11">link</a>',"DOC#12":'<a href="http://www.url.com/doc12">link</a>'}, NH: {"DOC#21":'<a href="http://www.url.com/doc21">link</a>',"DOC#22":'<a href="http://www.url.com/doc22">link</a>'},VT: {"DOC#31":'<a href="http://www.url.com/doc31">link</a>',"DOC#32":'<a href="http://www.url.com/doc32">link</a>',"DOC#33":'<a href="http://www.url.com/doc33">link</a>'}};
+	
+	
+	$(document).ready(function() {
+	  $('#map').usmap({
+/*	    'stateSpecificStyles': {
+	      'AK' : {fill: '#f00'}
+	    },
+	    'stateSpecificHoverStyles': {
+	      'HI' : {fill: '#ff0'}
+	    },
+	    
+	    'mouseoverState': {
+	      'HI' : function(event, data) {
+	        //return false;
+	      }
+	    },*/
+	    
+	    
+	    'click' : function(event, data) {
+		  var textToDisplay = "";
+		  $.each(documentList[data.name], function(k, v) {
+			textToDisplay += k + ": " + v + "<br>";
+		  });
+		  document.getElementById("alert").innerHTML = textToDisplay;
+		  //.css('backgroundColor', '#ff0')
+		  //.stop()
+		  //.animate({backgroundColor: '#ddd'}, 1000);
+		  /*$('#alert')
+	        .text(textToDisplay)*/
+	    }
+	  });
+	  
+	  $('#over-md').click(function(event){
+	    $('#map').usmap('trigger', 'MD', 'mouseover', event);
+	  });
+	  
+	  $('#out-md').click(function(event){
+	    $('#map').usmap('trigger', 'MD', 'mouseout', event);
+	  });
+	});
+	</script>
+</head>
+<body>  
+  <div id="alert">Click alerts</div>
+  <div id="map" style="width: 70%; height: 630px; border: solid 3px red;"></div>
+</body>
+</html>
